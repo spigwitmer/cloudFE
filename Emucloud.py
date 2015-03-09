@@ -148,6 +148,7 @@ class EmuCloud(object):
 	
 	@cherrypy.expose
 	def index(self):
+		os.chdir(self.app_root)
 		response = ""
 		
 		response +="<input type='button' name='refresh_rdb' value='ReGenerate Cloud Database' onclick=\"location.href='regen'\">"
