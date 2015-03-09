@@ -61,7 +61,11 @@ def get_eset(db,system_name,game_name):
 		return []
 
 def append_rom_entry(f,entry):
-	
+	e = gen_rom_entry(f)
+	for ek in e.keys():
+		if(e[ek] != "" and entry[ek]==""):
+			entry[ek] = e[ek]
+			
 	entry['file_id'].append(f['id'])
 	new_sz = int(entry['file_sz']) + int(f['fileSize'])
 	entry['file_sz'] = new_sz
@@ -196,10 +200,12 @@ def refresh_db(dsvc,system_name=None):
 		else:
 			continue
 		if(not game_system in ROM.keys()):
-			ROM[game_system] = {}
+				ROM[game_system] = {}
+				
 		if(game_name in ROM[game_system].keys()):
 			ROM[game_system][game_name] = append_rom_entry(g,ROM[game_system][game_name])
 		else:
+			
 			ROM[game_system][game_name] = gen_rom_entry(g)
 
 	
