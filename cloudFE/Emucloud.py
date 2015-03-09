@@ -2,7 +2,7 @@ import os,sys,cherrypy,logging,json,importlib,base64,zipfile,shutil
 
 
 #My Imports
-import gd_auth,gd_ops
+from cloudFE import gd_auth, gd_ops
 
 
 
@@ -17,7 +17,7 @@ class EmuCloud(object):
 			os.makedirs("data")
 		if(not os.path.exists("databases")):
 			os.makedirs("databases")
-			os.system("python emucloud_dbgen.py")
+			os.system("cloudfe_dbgen")
 		
 		if(not os.path.exists(os.path.join("emulators","__init__.py"))):
 				f = open(os.path.join("emulators","__init__.py"),"wb")
@@ -193,7 +193,7 @@ class EmuCloud(object):
 	
 	@cherrypy.expose
 	def regen(self):
-		os.system("python emucloud_dbgen.py")
+		os.system("cloudfe_dbgen")
 		self.refresh_emucloud_database()
 		raise cherrypy.HTTPRedirect("/")
 	@cherrypy.expose
@@ -226,7 +226,7 @@ class EmuCloud(object):
 			emu.run(rom_files)
 			
 		else:
-			os.system("python emucloud_dbgen.py")
+			os.system("cloudfe_dbgen")
 			self.refresh_emucloud_database()
 			return "Error - %s Rom not found. Regenerating Database..." % game_name
 			
@@ -237,7 +237,12 @@ class EmuCloud(object):
 			#HAAAAAAX - TEH HAAAAAAXXX
 			os.makedirs("tmp")
 		raise cherrypy.HTTPRedirect("/")
-if(__name__=="__main__"):
+
+def main():
 	cherrypy.config.update({'server.socket_host': '0.0.0.0'})
 	cherrypy.config.update({'response.timeout':1000000000})
 	cherrypy.quickstart(EmuCloud())
+	return 0
+
+if(__name__=="__main__"):
+	sys.exit(main())

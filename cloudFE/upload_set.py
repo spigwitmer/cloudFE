@@ -1,6 +1,6 @@
 import sys,os,hashlib
-import gd_auth,gd_ops
 from xml.dom import minidom
+from cloudFE import gd_auth, gd_ops
 
 EMULATOR = 'desmume'
 SUPPORTED_EXTENSIONS = ['smc','sfc','zip','7z','rar']

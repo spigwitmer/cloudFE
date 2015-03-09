@@ -1,5 +1,5 @@
 import os,sys,json
-import gd_ops,gd_auth
+from cloudFE import gd_ops, gd_auth
 
 EMUCLOUD_KEY = "EmuCloud_Entry"
 EMUCARTW_KEY = "EmuCloud_Artwork"
@@ -202,10 +202,8 @@ def refresh_db(dsvc,system_name=None):
 		else:
 			ROM[game_system][game_name] = gen_rom_entry(g)
 
-	
-		
-if(__name__=="__main__"):
-	
+
+def main():
 	#Might as well leave it logged in.
 	dsvc = gd_auth.drive_login()
 	if(len(sys.argv) > 1):
@@ -214,10 +212,13 @@ if(__name__=="__main__"):
 	else:
 		refresh_db(dsvc)
 	#Print New XML Files.
-	for sys in ROM.keys():
-		if(sys == "Unsorted" or sys == []):
+	for romk, romval in ROM.items():
+		if(romk == "Unsorted" or romk == []):
 			continue
 		
-		#gen_xml(ROM[sys],sys)
-		gen_json(ROM[sys],sys)
-		
+		#gen_xml(romval,romk)
+		gen_json(romval,romk)
+	return 0
+	
+if(__name__=="__main__"):
+  sys.exit(main())
