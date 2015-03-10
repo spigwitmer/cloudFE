@@ -1,0 +1,24 @@
+How to Make An Entry:
+
+1.make a json file with the metadata you want:
+	a.bare minimum are 'loader' and 'system' - those two will tell the frontend where the entry goes and what to load.
+	b.upload the json with the description: cFE_ETRY
+
+2.upload all your artwork (videos,images,etc)
+	a.In description, write the entry tag cFE_ARTW followed by the uuid of the entries you want it to be used for separated by commas:
+		e.g. 'cFE_ARTW:Ti18zIyax06rXX7vzF9k8Q,OXDEM5V2JEaBYDgvegkrDg'
+
+3.upload the icon for the entry, 
+	a.Basically idential to artwork,write the entry tag cFE_ICON followed by the uuid of the entries you want it to be used for separated by commas:
+	e.g. 'cFE_ICON:Ti18zIyax06rXX7vzF9k8Q,OXDEM5V2JEaBYDgvegkrDg'
+	
+4.Now for the data - it can be in any format provided your loader can handle it.
+	a. Upload all your data files. If you have multiple data files (extra patches, updates, etc), files will overwrite their previous counterparts when
+		the loader uses them. Feel free to overlay contents on top of one another.
+	b. In the description, write the entry tag cFE_DATA followed by the uuid of the entries you want the data to be used with separated by commas.
+		e.g. ' cFE_DATA:OXDEM5V2JEaBYDgvegkrDg,Ti18zIyax06rXX7vzF9k8Q' would be used with two entries.
+
+5. OPTIONAL - if you need to upload a "loader" for a new system,
+	a. upload a zip file of the loader's files with an __init__.py included with a run() that takes one argument - the path to the files to use.
+	b. In description, write the entry tag cFE_LODR, followed by a comma separated list of pipe separated values for System|NativeOS|ldr_name
+		e.g. 'cFE_LODR:PC Windows|nt|pc_windows' or 'cFE_LODR:Super Nintendo|nt|zsnes,Super Nintendo|posix|zsnes'
