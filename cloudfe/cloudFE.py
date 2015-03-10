@@ -1,6 +1,6 @@
 import os,sys,cherrypy,json,base64,zipfile,importlib,shutil,subprocess
 try:
-	from cloudfe import cs
+	from cloudfe import cs, cfe_dbgen
 except:
 	import cs
 
@@ -44,7 +44,7 @@ class CloudFE(object):
 	def reload_db(self,first_run=False):
 		self.cfe_database = {}
 		if(first_run == False):
-			subprocess.call(["python","cfe_dbgen.py"])
+			cfe_dbgen.run()
 			self.get_loader_db()
 		#Load Any local databases.
 		for root,dirs,files in os.walk("databases"):
@@ -174,7 +174,7 @@ class CloudFE(object):
 		return response
 	@cherrypy.expose
 	def regen(self):
-		os.system("python cfe_dbgen.py")
+		cfe_dbgen.run()
 		self.get_loader_db()
 		self.reload_db(True)
 		self.cache_system_list=""
@@ -267,7 +267,7 @@ class CloudFE(object):
 			ldr.run(data_path)
 			
 		else:
-			os.system("python emucloud_dbgen.py")
+			cfe_dbgen.run()
 			self.refresh_emucloud_database()
 			return "Error - %s Rom not found. Regenerating Database..." % game_name
 		#Execute and Cleanup.
