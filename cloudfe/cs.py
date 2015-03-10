@@ -9,8 +9,8 @@ import os,importlib
 
 class CloudService(object):
 	driver_db = {
-	"gdrive":"cloudstorage.gdrive",
-	"onedrive":"cloudstorage.onedrive"
+	"gdrive":"cloudfe.cloudstorage.gdrive",
+	"onedrive":"cloudfe.cloudstorage.onedrive"
 	}
 	def __init__(self,svc_type):
 		self.svc_type = svc_type

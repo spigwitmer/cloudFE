@@ -1,5 +1,5 @@
 import os,sys,cherrypy,json,base64,zipfile,importlib,shutil
-import cs
+from cloudfe import cs
 
 
 class CloudFE(object):
@@ -26,7 +26,7 @@ class CloudFE(object):
 				if(not svc in self.cloud_services.keys()):
 					self.cloud_services[svc] = asvc
 		
-		if(not os.path.exists(os.path.join("Databases","Loaders.json"))):
+		if(not os.path.exists(os.path.join("databases","Loaders.json"))):
 			self.reload_db()
 		
 		
@@ -59,7 +59,7 @@ class CloudFE(object):
 						else:
 							req_emu = jd[j]['emulator']
 						
-						if(req_emu in self.loaderdb[fb][os.name].keys()):
+						if(os.name in self.loaderdb[fb] and req_emu in self.loaderdb[fb][os.name]):
 							jd[j]['has_loader'] = True
 						else:
 							jd[j]['has_loader'] = False
@@ -69,7 +69,7 @@ class CloudFE(object):
 		#Loader Tree: System->Native->Emulator_Name
 		self.loaderdb = {}
 		
-		json_data=open(os.path.join("Databases","Loaders.json"))
+		json_data=open(os.path.join("databases","Loaders.json"))
 		self.loaderdb = json.load(json_data)["Loader"]
 		json_data.close()
 		
@@ -240,8 +240,12 @@ class CloudFE(object):
 			return "Error - %s Rom not found. Regenerating Database..." % game_name
 		#Execute and Cleanup.
 		return "<input type='button' name='reset_menu' value='Back to Menu' onclick=\"location.href='reset'\">"
-if(__name__=="__main__"):
+
+def main():
 	cherrypy.config.update({'server.socket_host': '0.0.0.0'})
 	cherrypy.config.update({'server.socket_port': 1337})
 	cherrypy.config.update({'response.timeout':1000000000})
 	cherrypy.quickstart(CloudFE())
+
+if(__name__=="__main__"):
+	sys.exit(main())
