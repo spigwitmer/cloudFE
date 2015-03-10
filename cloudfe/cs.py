@@ -9,12 +9,16 @@ import os,importlib
 
 class CloudService(object):
 	driver_db = {
-	"gdrive":"cloudfe.cloudstorage.gdrive",
-	"onedrive":"cloudfe.cloudstorage.onedrive"
+	"gdrive":"cloudstorage.gdrive",
+	"onedrive":"cloudstorage.onedrive"
 	}
 	def __init__(self,svc_type):
 		self.svc_type = svc_type
-		self.svc_driver = importlib.import_module(self.driver_db[self.svc_type])
+		try:
+			self.svc_driver = importlib.import_module(self.driver_db[self.svc_type])
+		except:
+			self.svc_driver = importlib.import_module("cloudfe.%s" % self.driver_db[self.svc_type])
+			
 		
 		svc = self.svc_driver.login()
 		if(svc == None):

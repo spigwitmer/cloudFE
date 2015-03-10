@@ -1,5 +1,8 @@
-import os,sys,cherrypy,json,base64,zipfile,importlib,shutil
-from cloudfe import cs
+import os,sys,cherrypy,json,base64,zipfile,importlib,shutil,subprocess
+try:
+	from cloudfe import cs
+except:
+	import cs
 
 
 class CloudFE(object):
@@ -41,7 +44,7 @@ class CloudFE(object):
 	def reload_db(self,first_run=False):
 		self.cfe_database = {}
 		if(first_run == False):
-			os.system("python cfe_dbgen.py")
+			subprocess.call(["python","cfe_dbgen.py"])
 			self.get_loader_db()
 		#Load Any local databases.
 		for root,dirs,files in os.walk("databases"):
@@ -76,7 +79,12 @@ class CloudFE(object):
 		
 	def gen_entries(self,selected_system):
 		response = ""
+		elist = []
 		for ek in self.cfe_database[selected_system].keys():
+			elist.append((self.cfe_database[selected_system][ek]['name'],ek))
+		elist = sorted(elist)
+		for ek in elist:
+			ek = ek[1]
 			entry = self.cfe_database[selected_system][ek]
 			if(entry['has_loader']):
 				run_req = base64.b64encode("%s|%s" % (selected_system,ek))
