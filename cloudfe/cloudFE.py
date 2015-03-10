@@ -75,11 +75,18 @@ class CloudFE(object):
 		json_data=open(os.path.join("databases","Loaders.json"))
 		self.loaderdb = json.load(json_data)["Loader"]
 		json_data.close()
+	def sizeof_fmt(self,num, suffix='B'):
+		for unit in [' ',' K',' M',' G',' T',' P',' E',' Z']:
+			if abs(num) < 1024.0:
+				return "%3.1f%s%s" % (num, unit, suffix)
+			num /= 1024.0
+		return "%.1f%s%s" % (num, ' Y', suffix)
 		
 		
 	def gen_entries(self,selected_system):
 		response = ""
 		elist = []
+		#Sort Titles
 		for ek in self.cfe_database[selected_system].keys():
 			elist.append((self.cfe_database[selected_system][ek]['name'],ek))
 		elist = sorted(elist)
@@ -99,9 +106,26 @@ class CloudFE(object):
 			response += "<td><a href='run?req=%s'><video id='preview_video' loop='loop' onclick=\"this.pause()\"  onmouseover=\"this.play()\" onmouseout=\"this.pause();this.src='';this.src='%s'\" poster='%s' width='360' height='240' source src='%s'/></video></a></td>" % (run_req,video_entry,entry['Icon'][0]['url'],video_entry)
 			#Metadata for now.
 			
-			response +="<td>Entry_ID: %s</br>" % ek
+			#response +="<td>Entry_ID: %s</br>" % ek
+			response+="<td>"
+			if(entry['year'] == ""):
+				response+="%s<br/>" % entry['name']
+			else:
+				response+="%s (%s)<br/>" % (entry['name'],entry['year'])
+			response+= "Publisher: %s<br/>" % entry['publisher']
+			response+= "Developer: %s<br/>" % entry['developer']
+			response+= "Region: %s<br/>" % entry['region']
+			response+= "Genre: %s<br/>" % entry['genre']
+			response+= "Players: %s<br/>" % entry['players']
+			response+= "Size: %s<br/>" % self.sizeof_fmt(int(entry['data_sz']))
+			response+= "Description: <p><i>%s</i></p>" % entry['description']
+			
+			
+			'''DEBUG = Show ALL 
 			for ei in entry.keys():
 				response +="%s: %s<br/>" % (ei,entry[ei])	
+			'''
+			
 			response +="</td>"
 			response += "</tr>"
 		
