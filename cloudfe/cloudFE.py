@@ -59,7 +59,7 @@ class CloudFE(object):
 						else:
 							req_emu = jd[j]['emulator']
 						
-						if(req_emu in self.loaderdb[fb][os.name].keys()):
+						if(os.name in self.loaderdb[fb] and req_emu in self.loaderdb[fb][os.name]):
 							jd[j]['has_loader'] = True
 						else:
 							jd[j]['has_loader'] = False
